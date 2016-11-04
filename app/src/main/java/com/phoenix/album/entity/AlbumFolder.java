@@ -11,18 +11,33 @@ import java.util.ArrayList;
  * AlbumFolder
  */
 public class AlbumFolder implements Parcelable {
-
+    private int folderId;
     private String folderName;
     private ArrayList<AlbumImage> imageList = new ArrayList<>();
+    /**
+     * 文件夹是否被选中。
+     */
+    private boolean isChecked;
 
     public AlbumFolder() {
         super();
     }
 
-    public AlbumFolder(String folderName, ArrayList<AlbumImage> imageList) {
+    public AlbumFolder(int folderId, String folderName, ArrayList<AlbumImage> imageList, boolean isChecked) {
+        this.folderId = folderId;
         this.folderName = folderName;
         this.imageList = imageList;
+        this.isChecked = isChecked;
     }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
 
     public String getFolderName() {
         return folderName;
@@ -40,9 +55,24 @@ public class AlbumFolder implements Parcelable {
         this.imageList = imageList;
     }
 
+    public void addAlbumImage(AlbumImage albumImage) {
+        this.imageList.add(albumImage);
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     public AlbumFolder(Parcel in) {
-        folderName = in.readString();
-        imageList = in.createTypedArrayList(AlbumImage.CREATOR);
+        AlbumFolder af = new AlbumFolder();
+        af.folderId = in.readInt();
+        af.folderName = in.readString();
+        af.imageList = in.createTypedArrayList(AlbumImage.CREATOR);
+        af.isChecked = in.readInt() == 1;
     }
 
     public static final Creator<AlbumFolder> CREATOR = new Creator<AlbumFolder>() {
@@ -64,7 +94,9 @@ public class AlbumFolder implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(folderId);
         parcel.writeString(folderName);
         parcel.writeTypedList(imageList);
+        parcel.writeInt(isChecked ? 1 : 0);
     }
 }

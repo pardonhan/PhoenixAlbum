@@ -11,6 +11,10 @@ import android.support.annotation.NonNull;
  */
 public class AlbumImage implements Parcelable, Comparable<AlbumImage> {
     /**
+     * 图片Id
+     */
+    private int imgId;
+    /**
      * 图片名称
      */
     private String imgName;
@@ -27,10 +31,19 @@ public class AlbumImage implements Parcelable, Comparable<AlbumImage> {
         super();
     }
 
-    public AlbumImage(String imgName, String imgPath, long imgCreateTime) {
+    public AlbumImage(int imgId,String imgName, String imgPath, long imgCreateTime) {
+        this.imgId = imgId;
         this.imgName = imgName;
         this.imgPath = imgPath;
         this.imgCreateTime = imgCreateTime;
+    }
+
+    public int getImgId() {
+        return imgId;
+    }
+
+    public void setImgId(int imgId) {
+        this.imgId = imgId;
     }
 
     public String getImgName() {
@@ -64,6 +77,7 @@ public class AlbumImage implements Parcelable, Comparable<AlbumImage> {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(imgId);
         parcel.writeString(imgName);
         parcel.writeString(imgPath);
         parcel.writeLong(imgCreateTime);
@@ -84,6 +98,7 @@ public class AlbumImage implements Parcelable, Comparable<AlbumImage> {
 
     public AlbumImage(Parcel in) {
         AlbumImage albumImage = new AlbumImage();
+        albumImage.imgId = in.readInt();
         albumImage.imgName = in.readString();
         albumImage.imgPath = in.readString();
         albumImage.imgCreateTime = in.readLong();
